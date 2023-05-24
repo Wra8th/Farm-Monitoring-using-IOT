@@ -1,38 +1,3 @@
-<?php
-// Database credentials
-$host = "localhost";
-$username = "root";
-$password = "";
-$dbname = "iot_farm_monitoring";
-
-// Create connection
-$conn = new mysqli($host, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// SQL query to retrieve data
-$sql = "SELECT * FROM dht_new ORDER BY id DESC LIMIT 1";
-
-// Execute query
-$result = $conn->query($sql);
-
-// Check if any rows were returned
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while($row = $result->fetch_assoc()) {
-        // echo "id: " . $row["ID"]. " - Humidity: " . $row["humidity"]. " - temperature: " . $row["temperature"]. " - moisture " . $row["moisture"] . "<br>";
-        // $column1 = $row["humidity"];
-    }
-} else {
-    echo "0 results";
-}
-
-// Close connection
-$conn->close();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,35 +6,53 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      setInterval(function() {
+        fetchData();
+      }, 6000); // Fetch data every 5 seconds
+      function fetchData() {
+        $.ajax({
+          url: 'dbh.php', // Replace with the path to your server-side script
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            // Process the received data
+            console.log(JSON.stringify(data[0]));
+            // Update the DOM with the new data
+            // Example: $('#result').text(data);
+            document.getElementById("temp").innerHTML = JSON.stringify(data[0]["temperature"]);
+            document.getElementById("humidity").innerHTML = JSON.stringify(data[0]["humidity"]);
+            document.getElementById("gas").innerHTML = JSON.stringify(data[0]["gas"]);
+            document.getElementById("moist").innerHTML = JSON.stringify(data[0]["moisture"]);
+            document.getElementById("rain").innerHTML = JSON.stringify(data[0]["rain"]);
+            // document.getElementById("time").innerHTML = JSON.stringify(data[0]["date"]);
+          },
+          error: function(xhr, status, error) {
+            console.log('Error:', error);
+          }
+        });
+      }
+    });
+  </script>
 </head>
 <body>
-    <!-- <?php echo "<h1> $column1 </h1>" ?> -->
-    <div class="nav-bar">
-
-        <div><a href="/">Home</a></div>
-        <div><a href="/temp">T&H</a></div>
-        <div><a href="/rain">Rain</a></div>
-        <div><a href="/gas">Gas</a></div>
-
-    </div>
-    
     <h1>WELCOME TO FARM WATCH</h1>
     <div class="flex-container">
         <div class="splash-image">
             <img src = "images/main.png">
         </div>
-        <div class="splash-button">
-            <button>CLICK TO CONTINUE</button>
-        </div>
-        <div id ="content">
-</div>  
     </div>
+    <div id="result">
+        <p>Humidity: <p id="humidity"> </p></p>
+        <p>Temperature: <p id="temp"> </p></p>
+        <p>Gas Levels: <p id="gas"> </p></p>
+        <p>Moisture Levels: <p id="moist"> </p></p>
+        <p>Rain Detection: <p id="rain"> </p></p>
+        <!-- <p>TimeStamp: <p id="time"> </p></p> -->
+    </div>
+
     
-    
-
-
-
-
-    <script src="script.js"></script>
 </body>
 </html>
