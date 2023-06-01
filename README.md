@@ -1,3 +1,4 @@
 # Farm-Monitoring-using-IOT
 Farm monitoring app using IOT
-The Project Has three parts, The Arduino Device and its corresponding code, The Backend (MySql and PHP), The Frontend (HTML, CSS, JS, AJAX).
+The Project Has three parts, The ESP8266 Device and its corresponding code, The Backend (MySql and PHP), The Frontend (HTML, CSS, JS, AJAX).
+![Screenshot 2023-06-01 115743](https://github.com/Wra8th/Farm-Monitoring-using-IOT/assets/56033607/0943deac-4093-4f59-9d49-4a534983d88c)
